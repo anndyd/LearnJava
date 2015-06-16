@@ -12,32 +12,25 @@ import java.util.List;
  */
 public class WeekOf1 {
 	public static void main(String[] args) {
-		try {
-			String usage = "Usage: \n"
-					+ "       Input 1 to run SplitString,\n"
-					+ "       Input 2 to run AlignString,\n"
-					+ "       Input exit to Exit program.";
-			System.out.println(usage);
-			while (true) {
-				System.out.print("Please input your selection:");
-				String input = new BufferedReader(new InputStreamReader(System.in))
-						.readLine();
-				if (input.trim().equalsIgnoreCase("Exit")) {
-					break;
+		String usage = "Usage: \n"
+				+ "       Input 1 to run SplitString,\n"
+				+ "       Input 2 to run AlignString,\n"
+				+ "       Input exit to Exit program.";
+		System.out.println(usage);
+		while (true) {
+			System.out.print("Please input your selection:");
+			String input = getConsoleInput();
+			if (input.trim().equalsIgnoreCase("Exit")) {
+				break;
+			} else if (input.trim().equals("1") || input.trim().equals("2")) {
+				System.out.print("Please input a string:");
+				if (input.trim().equals("1")) {
+					splitString(getConsoleInput());
 				} else {
-					System.out.print("Please input a string:");
-					String input2 = new BufferedReader(new InputStreamReader(System.in))
-							.readLine();
-					if (input.trim().equals("1")) {
-						splitString(input2);
-					} else {
-						alignString(input2);
-					}
+					System.out.println("The string should be Key,Value pair, likes: {N:US,C:NYC}");
+					alignString(getConsoleInput());
 				}
 			}
-		} catch (IOException e) {
-			System.out.println("Your input is invalid!");
-			e.printStackTrace();
 		}
 	}
 
@@ -77,7 +70,6 @@ public class WeekOf1 {
 	public static void alignString(String input){
 		// Nation is key, City is value
 		int iStart = 0;
-		System.out.println("[City : Nation]");
 		StringBuilder city;
 		StringBuilder nation;
 		while (true) {
@@ -87,7 +79,6 @@ public class WeekOf1 {
 				if (leftBracket >= 0 && rightBracket > 0) {
 					String tmpStr = input.substring(leftBracket + 1,
 							rightBracket);
-					iStart = rightBracket + 1;
 
 					if (tmpStr != null && tmpStr.length() > 0) {
 						String[] tmpArray = tmpStr.split(",");
@@ -109,11 +100,14 @@ public class WeekOf1 {
 							nation.insert(0, " ");
 						}
 						
+						if (iStart == 0) System.out.println("[City : Nation]");
 						System.out.println(String.format("[%s : %s]", city, nation));
 					} else {
 						break;
 					}
+					iStart = rightBracket + 1;
 				} else {
+					System.out.println("Your input data is invalid!");
 					break;
 				}
 			} catch (Exception e) {
@@ -122,5 +116,16 @@ public class WeekOf1 {
 				break;
 			}
 		}
+	}
+	
+	public static String getConsoleInput() {
+		String input = "";
+		try {
+			input = new BufferedReader(new InputStreamReader(System.in)).readLine();
+		} catch (IOException e) {
+			System.out.println("Your input is invalid!");
+			e.printStackTrace();
+		}
+		return input;
 	}
 }
